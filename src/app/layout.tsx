@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/components/ui/theme-provider";
+import BackgroundMeteors from "@/components/ui/backgroundmeteors";
+import { Onest } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Import Google Fonts với className để tránh mismatch
+const geistSans = Onest({
   subsets: ["latin"],
+  variable: "--font-onest-sans", // vẫn khai báo variable nếu cần
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geistMono = Onest({
   subsets: ["latin"],
+  variable: "--font-onest-mono",
 });
 
 export const metadata: Metadata = {
@@ -23,11 +26,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      {/* Sử dụng className thay vì variable */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+        className={`${geistSans.className} ${geistMono.className} antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          <BackgroundMeteors>{children}</BackgroundMeteors>
+        </ThemeProvider>
       </body>
     </html>
   );
