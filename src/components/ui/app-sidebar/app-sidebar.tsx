@@ -1,10 +1,14 @@
 import {
   Calendar,
   Home,
-  Inbox,
-  Search,
   Settings,
-  CheckCircle,
+  Contact,
+  LayoutDashboard,
+  Projector,
+  BookAIcon,
+  User,
+  LucidePhoneCall,
+  ArrowRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -18,30 +22,25 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import LustreText from "@/components/ui/lustretext";
 import { Badge } from "@/components/ui/badge";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useSidebar } from "@/components/ui/sidebar";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const navigationItems = [
+const homeItems = [
   {
     title: "Home",
     url: "/",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "/inbox",
-    icon: Inbox,
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutDashboard,
   },
   {
     title: "Calendar",
@@ -49,9 +48,24 @@ const navigationItems = [
     icon: Calendar,
   },
   {
-    title: "Search",
-    url: "/search",
-    icon: Search,
+    title: "Project",
+    url: "/project",
+    icon: Projector,
+  },
+  {
+    title: "Blog",
+    url: "/blog",
+    icon: BookAIcon,
+  },
+  {
+    title: "About",
+    url: "/about",
+    icon: User,
+  },
+  {
+    title: "Chatbot",
+    url: "/chatbot",
+    icon: LucidePhoneCall,
   },
 ];
 
@@ -61,57 +75,94 @@ const settingsItems = [
     url: "/settings",
     icon: Settings,
   },
+  {
+    title: "Contact",
+    url: "/contact",
+    icon: Contact,
+  },
 ];
 
 export function AppSidebar() {
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
+  // Xử lý transition sidebar
+  const { open } = useSidebar();
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
+
+  // Xử lý lấy pathname
+  const isActive = (url: string) => {
+    return pathname == url || pathname.startsWith(url + "/");
+  };
+
   return (
-    <Sidebar className="h-screen border-r border-white/10">
-      <SidebarHeader className="border-b p-6">
-        <div className="flex flex-col items-center space-y-4">
-          <Avatar className="h-16 w-16">
+    <Sidebar
+      collapsible="icon"
+      className={cn(
+        "h-screen transition-all duration-700 ease-in-out flex flex-col items-center justify-center",
+        open ? "w-64" : "w-[100px]"
+      )}>
+      <SidebarHeader
+        className={cn("flex justify-center", open ? "border-b, p-4" : "")}>
+        <div className="flex items-center gap-3">
+          {/* Avatar */}
+          <Avatar className={cn(open ? "h-16 w-16" : "h-8 w-8")}>
             <AvatarImage
-              src="https://avatars.githubusercontent.com/u/134993775?v=4&size=64"
-              alt="Ngo Van Duc"
+              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/485801297_1147830123554747_6225617185809628945_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KTunqg4b7xoQ7kNvwGU9idB&_nc_oc=AdkCHNSZ-W9jxTh6TEZbCEaHzpS4KR6lcUKJ3Q-tYANhyZbQxcHOPZhsrPq8fMuo1j4&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&_nc_gid=5MLzOexl5S68gkMbEciaJQ&oh=00_AfaLTfBJgS0A47v8IKGLz3KNaW0QYqXqgrhBfMIvXEC76g&oe=68C01E4A"
+              alt="Ngô Văn Đức"
             />
             <AvatarFallback>NVD Avatar</AvatarFallback>
           </Avatar>
 
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center gap-2">
-              <LustreText
-                text="Ngo Van Duc"
-                className="text-lg font-semibold text-neutral-700 dark:lustre-dark"
-              />
+          {/* Name + Badge */}
+          {open && (
+            <div className="flex flex-col items-start space-y-1">
+              <div className="flex items-center gap-2 w-[150px]">
+                <LustreText
+                  text="Ngô Văn Đức"
+                  className="text-lg font-semibold inline-block text-neutral-700 dark:lustre-dark"
+                />
+              </div>
 
-              <CheckCircle className="h-5 w-5 text-blue-500" />
+              <Badge
+                variant="secondary"
+                className="text-xs text-neutral-700 dark:text-zinc-50">
+                @dennisngo
+              </Badge>
             </div>
-
-            <Badge variant="secondary" className="text-xs text-neutral-700">
-              @dennisngo
-            </Badge>
-          </div>
+          )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-4">
+      <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => (
+              {homeItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a
+                    <Link
                       href={item.url}
-                      className="flex text-neutral-700 items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </a>
+                      className={cn(
+                        "flex items-center gap-3 rounded-md py-2 font-medium hover:bg-accent hover:text-accent-foreground transition-colors",
+                        open ? "px-3 justify-between" : "px-0 justify-center", // 👈 quan trọng
+                        isActive(item.url)
+                          ? "bg-accent text-accent-foreground"
+                          : ""
+                      )}>
+                      {/* bên trái: icon + text */}
+                      <div className="flex items-center gap-3">
+                        <item.icon className="h-4 w-4" />
+                        {open && <span>{item.title}</span>}
+                      </div>
+
+                      {/* bên phải: mũi tên */}
+                      {isActive(item.url) && open && (
+                        <ArrowRight className="h-4 w-4" />
+                      )}
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -126,12 +177,12 @@ export function AppSidebar() {
               {settingsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a
+                    <Link
                       href={item.url}
                       className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </a>
+                      <item.icon className="h-5 w-5" />
+                      {open && <span>{item.title}</span>}
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -141,29 +192,11 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t p-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <div className="text-xs text-muted-foreground text-center">
-          © 2025 NVD Portfolio
-        </div>
+        {open && (
+          <div className="text-xs text-muted-foreground text-center min-w-[200px]">
+            © 2025 Dennis Ngo Portfolio
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

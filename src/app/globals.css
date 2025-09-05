@@ -147,13 +147,14 @@
   .lustre-dark {
     background-image: linear-gradient(
       90deg,
-      rgba(0, 180, 255, 0.15) 0%,
-      /* Xanh nhạt sáng hơn */ rgba(0, 180, 255, 0.5) 30%,
-      /* Xanh đậm hơn */ rgba(128, 0, 255, 0.7) 45%,
-      /* Tím nhạt sáng hơn */ #a366ff 50%,
-      /* Tím đậm sáng hơn */ rgba(128, 0, 255, 0.7) 55%,
-      /* Xanh nhạt sáng hơn */ rgba(0, 180, 255, 0.5) 70%,
-      /* Xanh đậm hơn */ rgba(0, 180, 255, 0.15) 100% /* Xanh nhạt trong suốt */
+      rgba(0, 200, 255, 0.25) 0%,
+      /* Xanh sáng hơn */ rgba(0, 200, 255, 0.7) 30%,
+      /* Xanh tươi */ rgba(150, 50, 255, 0.8) 45%,
+      /* Tím sáng hơn */ #b88bff 50%,
+      /* Tím pastel */ rgba(150, 50, 255, 0.8) 55%,
+      /* Tím tươi */ rgba(0, 200, 255, 0.7) 70%,
+      /* Xanh tươi */ rgba(0, 200, 255, 0.25) 100%
+        /* Xanh trong suốt sáng hơn */
     );
   }
 
