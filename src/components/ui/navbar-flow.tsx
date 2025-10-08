@@ -62,27 +62,24 @@ const ListItem: React.FC<ListItemProps> = ({
       className="relative"
       onMouseEnter={() => setSelected(element)}
       onMouseLeave={(e) => {
-        const dropdown = e.currentTarget.querySelector('.dropdown-content');
+        const dropdown = e.currentTarget.querySelector(".dropdown-content");
         if (dropdown) {
           const dropdownRect = dropdown.getBoundingClientRect();
           if (e.clientY < dropdownRect.top - 20) {
             setSelected(null);
           }
         }
-      }}
-    >
+      }}>
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-gray-800 dark:text-gray-200 font-medium text-base lg:text-xl whitespace-nowrap hover:opacity-[0.9] hover:text-gray-900 dark:hover:text-white py-1"
-      >
+        className="cursor-pointer text-gray-800 dark:text-gray-200 font-medium text-base lg:text-xl whitespace-nowrap hover:opacity-[0.9] hover:text-gray-900 dark:hover:text-white py-1">
         {element}
       </motion.p>
       {selected !== null && (
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={springTransition}
-        >
+          transition={springTransition}>
           {selected === element && (
             <div className="absolute top-[calc(100%_+_0.5rem)] left-1/2 transform -translate-x-1/2 z-50">
               <motion.div
@@ -90,11 +87,10 @@ const ListItem: React.FC<ListItemProps> = ({
                 layoutId="selected"
                 className="dropdown-content bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-2xl"
                 style={{
-                  maxWidth: 'min(90vw, 400px)',
+                  maxWidth: "min(90vw, 400px)",
                 }}
                 onMouseEnter={() => setSelected(element)}
-                onMouseLeave={() => setSelected(null)}
-              >
+                onMouseLeave={() => setSelected(null)}>
                 <motion.div layout className="w-max h-full p-4 min-w-48">
                   {children}
                 </motion.div>
@@ -107,13 +103,16 @@ const ListItem: React.FC<ListItemProps> = ({
   );
 };
 
-export const HoverLink: React.FC<HoverLinkProps> = ({ url, children, onPress }) => {
+export const HoverLink: React.FC<HoverLinkProps> = ({
+  url,
+  children,
+  onPress,
+}) => {
   return (
     <a
       href={url}
       onClick={onPress}
-      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-    >
+      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
       {children}
     </a>
   );
@@ -129,8 +128,7 @@ export const FeatureItem: React.FC<FeatureItemProps> = ({
     <a
       href={url}
       onClick={onPress}
-      className="block p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-    >
+      className="block p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
       <h4 className="font-medium text-gray-900 dark:text-white">{heading}</h4>
       <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{info}</p>
     </a>
@@ -256,12 +254,11 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
   return (
     <div className={`sticky top-0 z-50 w-full ${styleName}`}>
       <div className="hidden md:block">
-        <div className="relative w-full max-w-7xl mx-auto h-24 flex items-center justify-between px-4 lg:px-10">
+        <div className="relative w-full mx-auto h-24 flex items-center justify-between px-4 lg:px-10">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={emblemMotion}
-            className="bg-gray-200/80 dark:bg-black/95 backdrop-blur-sm text-gray-800 dark:text-gray-200 px-4 lg:px-8 py-3 lg:py-4 rounded-full font-semibold text-lg lg:text-xl z-10 flex-shrink-0"
-          >
+            className="bg-gray-200/80 dark:bg-black/95 backdrop-blur-sm text-gray-800 dark:text-gray-200 px-4 lg:px-8 py-3 lg:py-4 rounded-full font-semibold text-lg lg:text-xl z-10 flex-shrink-0">
             {emblem}
           </motion.div>
 
@@ -272,27 +269,23 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
             }}
             animate={navMotion}
             className="bg-gray-200/80 dark:bg-black/95 backdrop-blur-sm rounded-full flex items-center justify-center gap-6 lg:gap-12 z-10 flex-shrink-0"
-            onMouseLeave={() => setSelectedSubmenu(null)}
-          >
+            onMouseLeave={() => setSelectedSubmenu(null)}>
             {links.map((element) => (
               <div key={element.text}>
                 {element.submenu ? (
                   <ListItem
                     setSelected={setSelectedSubmenu}
                     selected={selectedSubmenu}
-                    element={element.text}
-                  >
+                    element={element.text}>
                     {element.submenu}
                   </ListItem>
                 ) : (
                   <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: sequenceDone ? 1 : 0 }}
-                  >
+                    animate={{ opacity: sequenceDone ? 1 : 0 }}>
                     <a
                       href={element.url || "#"}
-                      className="text-gray-800 dark:text-gray-200 font-medium text-base lg:text-xl whitespace-nowrap hover:text-gray-900 dark:hover:text-white transition-colors py-1"
-                    >
+                      className="text-gray-800 dark:text-gray-200 font-medium text-base lg:text-xl whitespace-nowrap hover:text-gray-900 dark:hover:text-white transition-colors py-1">
                       {element.text}
                     </a>
                   </motion.div>
@@ -304,8 +297,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={switchMotion}
-            className="bg-gray-200/80 dark:bg-black/95 backdrop-blur-sm rounded-full p-2 lg:p-3 z-10 flex-shrink-0 flex items-center gap-2 lg:gap-3"
-          >
+            className="bg-gray-200/80 dark:bg-black/95 backdrop-blur-sm rounded-full p-2 lg:p-3 z-10 flex-shrink-0 flex items-center gap-2 lg:gap-3">
             {extraIcons.map((icon, idx) => (
               <div key={idx} className="flex items-center justify-center">
                 {icon}
@@ -324,8 +316,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
             animate={svgMotion}
             className="absolute inset-0 w-full h-full z-0 pointer-events-none"
             viewBox="0 0 1400 96"
-            preserveAspectRatio="none"
-          >
+            preserveAspectRatio="none">
             <defs>
               <filter id="connectionBlur">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
@@ -335,8 +326,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
                 <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
                 <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
@@ -346,8 +336,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#06b6d4" stopOpacity="0" />
                 <stop offset="50%" stopColor="#06b6d4" stopOpacity="1" />
                 <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
@@ -357,8 +346,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
                 <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
                 <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
@@ -368,8 +356,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
                 <stop offset="50%" stopColor="#f59e0b" stopOpacity="1" />
                 <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
@@ -379,8 +366,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#ef4444" stopOpacity="0" />
                 <stop offset="50%" stopColor="#ef4444" stopOpacity="1" />
                 <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
@@ -390,8 +376,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                 x1="0%"
                 y1="0%"
                 x2="100%"
-                y2="0%"
-              >
+                y2="0%">
                 <stop offset="0%" stopColor="#10b981" stopOpacity="0" />
                 <stop offset="50%" stopColor="#10b981" stopOpacity="1" />
                 <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
@@ -557,12 +542,11 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
 
       <div className="block md:hidden">
         <div className="top-0 z-50 w-full border-b border-gray-200/40 dark:border-gray-800/40 bg-gray-50/95 dark:bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-gray-50/60 dark:supports-[backdrop-filter]:bg-black/60 relative">
-          <div className="container flex h-16 max-w-screen-2xl items-center px-4">
+          <div className="flex h-16 w-full items-center px-4">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={emblemMotion}
-              className="mr-4 flex-shrink-0"
-            >
+              className="mr-4 flex-shrink-0">
               <div className="bg-gray-200/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-800 dark:text-gray-200 px-4 py-2 rounded-full font-semibold text-base">
                 {emblem}
               </div>
@@ -572,8 +556,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={switchMotion}
-                className="flex items-center space-x-2"
-              >
+                className="flex items-center space-x-2">
                 {extraIcons.map((icon, idx) => (
                   <div key={idx} className="flex items-center justify-center">
                     {icon}
@@ -589,8 +572,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
 
               <button
                 onClick={toggleMobileMenu}
-                className="flex items-center justify-center w-9 h-9 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-              >
+                className="flex items-center justify-center w-9 h-9 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
                 {mobileMenuVisible ? (
                   <Close className="h-5 w-5" />
                 ) : (
@@ -608,9 +590,8 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
               maxHeight: mobileMenuVisible ? "80vh" : 0,
             }}
             transition={{ duration: 0.3 }}
-            className="absolute left-0 right-0 top-full z-40 overflow-y-auto border-t border-gray-200/40 dark:border-gray-800/40 bg-gray-50/95 dark:bg-black/95 backdrop-blur"
-          >
-            <div className="container py-4 px-4">
+            className="absolute left-0 right-0 top-full z-40 overflow-y-auto border-t border-gray-200/40 dark:border-gray-800/40 bg-gray-50/95 dark:bg-black/95 backdrop-blur">
+            <div className="w-full py-4 px-4">
               <nav className="flex flex-col space-y-3">
                 {links.map((element, idx) => (
                   <div key={element.text} className="space-y-2">
@@ -618,8 +599,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                       <>
                         <button
                           className="flex items-center justify-between w-full text-gray-800 dark:text-gray-200 font-medium text-base py-2 px-4 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800"
-                          onClick={() => toggleSection(element.text)}
-                        >
+                          onClick={() => toggleSection(element.text)}>
                           <span>{element.text}</span>
                           <span>
                             {openedSections[element.text] ? (
@@ -635,8 +615,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             transition={{ duration: 0.2 }}
-                            className="pl-4 space-y-1 overflow-hidden"
-                          >
+                            className="pl-4 space-y-1 overflow-hidden">
                             {renderSubmenuItems(element.submenu)}
                           </motion.div>
                         )}
@@ -645,8 +624,7 @@ const NavbarFlow: React.FC<NavbarFlowProps> = ({
                       <a
                         href={element.url || "#"}
                         onClick={hideMobileMenu}
-                        className="text-gray-800 dark:text-gray-200 font-medium text-base py-2 px-4 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800 block"
-                      >
+                        className="text-gray-800 dark:text-gray-200 font-medium text-base py-2 px-4 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-200 dark:border-gray-800 block">
                         {element.text}
                       </a>
                     )}

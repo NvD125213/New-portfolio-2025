@@ -2,6 +2,19 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Custom thin scrollbar for main content */
+main::-webkit-scrollbar {
+  width: 6px;
+  background: transparent;
+}
+main::-webkit-scrollbar-thumb {
+  background: #d1d5db; /* Tailwind zinc-300 */
+  border-radius: 8px;
+}
+main::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa; /* Tailwind zinc-400 */
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -121,8 +134,14 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
   body {
-    @apply bg-background text-foreground;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
   }
 }
 
@@ -166,5 +185,54 @@
 
   .animate-shine {
     animation: shine 3s linear infinite;
+  }
+
+  /* Canopy animations */
+  @keyframes canopy-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+
+  @keyframes canopy-y {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
+  }
+
+  /* Animation utilities */
+  .animate-canopy-horizontal {
+    animation: canopy-x var(--duration) infinite linear;
+  }
+
+  .animate-canopy-vertical {
+    animation: canopy-y var(--duration) linear infinite;
+  }
+
+  /* Hide scrollbar */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Smooth scroll */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Fix animation reverse direction for canopy */
+  .animate-canopy-horizontal.reverse,
+  .animate-canopy-vertical.reverse {
+    animation-direction: reverse !important;
   }
 }

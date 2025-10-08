@@ -108,10 +108,7 @@ export function AppSidebar() {
         <div className="flex items-center gap-3">
           {/* Avatar */}
           <Avatar className={cn(open ? "h-16 w-16" : "h-8 w-8")}>
-            <AvatarImage
-              src="https://scontent.fhan17-1.fna.fbcdn.net/v/t39.30808-6/485801297_1147830123554747_6225617185809628945_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KTunqg4b7xoQ7kNvwGU9idB&_nc_oc=AdkCHNSZ-W9jxTh6TEZbCEaHzpS4KR6lcUKJ3Q-tYANhyZbQxcHOPZhsrPq8fMuo1j4&_nc_zt=23&_nc_ht=scontent.fhan17-1.fna&_nc_gid=5MLzOexl5S68gkMbEciaJQ&oh=00_AfaLTfBJgS0A47v8IKGLz3KNaW0QYqXqgrhBfMIvXEC76g&oe=68C01E4A"
-              alt="Ngô Văn Đức"
-            />
+            <AvatarImage src="/avatar/avatar.png" alt="Ngô Văn Đức" />
             <AvatarFallback>NVD Avatar</AvatarFallback>
           </Avatar>
 

@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import BackgroundMeteors from "@/components/ui/backgroundmeteors";
-import { Onest } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 
-// Import Google Fonts với className để tránh mismatch
-const geistSans = Onest({
+const geistSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-onest-sans", // vẫn khai báo variable nếu cần
+  variable: "--font-jakarta",
 });
 
-const geistMono = Onest({
+const geistMono = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-onest-mono",
+  variable: "--font-jakarta-mono",
 });
 
 export const metadata: Metadata = {
