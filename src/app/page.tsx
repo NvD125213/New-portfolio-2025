@@ -8,8 +8,11 @@ import {
   CircleArrowRightIcon,
   ChevronLeft,
   ChevronRight,
+  Code2Icon,
 } from "lucide-react";
+import { Experience } from "@/components/timeline-02/timeline-02";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import Timeline from "@/components/timeline-02/timeline-02";
 import { useRef } from "react";
 
 export default function HomePage() {
@@ -34,6 +37,156 @@ export default function HomePage() {
     container.scrollTo(scrollOptions);
   };
 
+  const experiences: Experience[] = [
+    {
+      title: "Lập trình viên Full-stack",
+      company: "Công ty cổ phần viễn thông CGV",
+      icon_timeline: <Code2Icon className="h-3 w-3 text-primary" />,
+      level: "Middle",
+      image:
+        "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/XiVmux6f3zmmUAy5REVVpixvYGPvv73Y_1731309902____a49b8f1134f559fb1766f3d02e12f1a2.jpg",
+      period: "12/03/2025 - Hiện tại",
+      description: [
+        "Tham gia vào quá trình phát triển và duy trì các dự án phần mềm của công ty.",
+        "Phối hợp cùng các thành viên trong nhóm để phân tích yêu cầu và xây dựng giải pháp phù hợp.",
+        "Thực hiện lập trình, kiểm thử và tối ưu mã nguồn nhằm đảm bảo hiệu suất và tính ổn định của hệ thống.",
+        "Tìm hiểu và áp dụng các kiến thức, công nghệ mới vào công việc thực tế.",
+        "Hỗ trợ xử lý sự cố, cải thiện trải nghiệm người dùng và nâng cao chất lượng sản phẩm.",
+      ],
+
+      technologies: [
+        {
+          name: "React",
+          icon: "/icon/react.avif",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Python",
+          icon: "/icon/python.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "FastAPI",
+          icon: "/icon/fastapi.svg",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "TypeScript",
+          icon: "/icon/ts.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Linux",
+          icon: "/icon/linux.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Postgres",
+          icon: "/icon/postgres.jpg",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+      ],
+      projects: [
+        {
+          name: "Project 1",
+          image: "https://images.unsplash.com/photo-1467493330285-2fe6a9f97483",
+          content: "Project 1",
+        },
+        {
+          name: "Project 2",
+          image: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706",
+          content: "Project 2",
+        },
+        {
+          name: "Project 3",
+          image:
+            "https://plus.unsplash.com/premium_photo-1692340973636-6f2ff926af39?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
+          content: "Project 3",
+        },
+        {
+          name: "Project 4",
+          image:
+            "https://images.unsplash.com/photo-1687795975521-825a47419cc8?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
+          content: "Project 4",
+        },
+      ],
+    },
+    {
+      title: "Lập trình viên Frontend",
+      company: "Công ty Cổ phần JVB Việt Nam",
+      icon_timeline: <Code2Icon className="h-3 w-3 text-primary" />,
+      image:
+        "https://itviec.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6Nzk3MjczLCJwdXIiOiJibG9iX2lkIn19--febdc41760429a8aac758b65a46af2f275443e61/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfdG9fZml0IjpbMTcwLG51bGxdfSwicHVyIjoidmFyaWF0aW9uIn19--296f540994727dae0782a32330a49c8b7374a6c7/jvb-vietnam-logo.png",
+      period: "04/09/2024 - 01/01/2025",
+      level: "Intern/Fresher",
+      description: [
+        "Tham gia phát triển giao diện người dùng cho các hệ thống quản lý và website dịch vụ.",
+        "Phối hợp với nhóm backend để tích hợp API và xử lý dữ liệu động trên giao diện.",
+        "Đảm bảo sản phẩm hiển thị tốt trên đa nền tảng và tối ưu hiệu năng khi tải trang.",
+        "Tham gia review code và đóng góp ý kiến cải tiến quy trình phát triển giao diện.",
+        "Học hỏi, cập nhật xu hướng UI/UX và công nghệ web mới để áp dụng vào dự án thực tế.",
+      ],
+      technologies: [
+        {
+          name: "React",
+          icon: "/icon/react.avif",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Python",
+          icon: "/icon/python.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "FastAPI",
+          icon: "/icon/fastapi.svg",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "TypeScript",
+          icon: "/icon/ts.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Linux",
+          icon: "/icon/linux.png",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+        {
+          name: "Postgres",
+          icon: "/icon/postgres.jpg",
+          bg: "bg-[#242629]",
+          classname: "text-white",
+        },
+      ],
+      projects: [
+        {
+          name: "Project 3",
+          image:
+            "https://plus.unsplash.com/premium_photo-1692340973636-6f2ff926af39?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
+          content: "Project 3",
+        },
+        {
+          name: "Project 4",
+          image:
+            "https://images.unsplash.com/photo-1687795975521-825a47419cc8?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
+          content: "Project 4",
+        },
+      ],
+    },
+  ];
+
   return (
     <SidebarLayout>
       <div className="space-y-10">
@@ -48,7 +201,7 @@ export default function HomePage() {
               <span className="mr-1 sm:mr-2">
                 <CircleArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4" />
               </span>
-              <span className="text-[12px] sm:text-[16px] md:text-[18px] ">
+              <span className="text-[12px] sm:text-[14px] md:text-[16px] ">
                 Phát triển Web Full-stack
               </span>
             </li>
@@ -56,7 +209,7 @@ export default function HomePage() {
               <span className="mr-1 sm:mr-2">
                 <CircleArrowRightIcon className="w-3 h-3 sm:w-4 sm:h-4" />
               </span>
-              <span className="text-[12px] sm:text-[16px] md:text-[18px] ">
+              <span className="text-[12px] sm:text-[14px] md:text-[16px] ">
                 Lập trình viên Full-time
               </span>
             </li>
@@ -194,15 +347,29 @@ export default function HomePage() {
           </div>
           <div id="experience-work">
             <div className="w-full">
-              <div className="px-4 rounded-lg">
+              <div className="md:px-4 rounded-lg">
                 <div className="space-y-4">
-                  <Avatar
-                    className={
-                      "flex h-8 w-8 shrink-0 items-center  rounded-full justify-center bg-[var(--card-background)] border p-1"
-                    }>
-                    <AvatarImage src="/avatar/avatar.png" alt="Ngô Văn Đức" />
-                    <AvatarFallback>NVD Avatar</AvatarFallback>
-                  </Avatar>
+                  <div className="flex items-center pt-4 pb-2 gap-4">
+                    <Avatar
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full p-1 
+                 border bg-white/10 backdrop-blur-xs shadow-md shadow-gray-400/30">
+                      <AvatarImage
+                        className="rounded-full"
+                        src="/experience/gif_experience.gif"
+                        alt="GIF Experience"
+                      />
+                      <AvatarFallback>GIF Experience</AvatarFallback>
+                    </Avatar>
+                    <h2 className="lg:text-xl font-medium leading-snug items-center text-lg text-[#fffffe]">
+                      Thời gian
+                    </h2>
+                    <span
+                      className="relative w-2 h-2 rounded-full mt-1 bg-[#7f5af0] 
+                      before:content-[''] before:absolute before:inset-0 before:bg-inherit 
+                      before:rounded-full before:-z-10 before:animate-[ripple_1.5s_ease-out_infinite]"></span>
+                  </div>
+
+                  <Timeline experiences={experiences} />
                 </div>
               </div>
             </div>
