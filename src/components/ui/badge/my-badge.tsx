@@ -6,15 +6,10 @@ interface BadgeProps {
   classname?: string;
 }
 
-export default function BadgeCustom({
-  icon,
-  name,
-  bg = "bg-gray-200",
-  classname = "text-gray-800",
-}: BadgeProps) {
+export default function BadgeCustom({ icon, name, bg, classname }: BadgeProps) {
   return (
     <div
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${bg} ${classname}`}>
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-black dark:bg-[#242629] dark:text-white border ${bg} ${classname}`}>
       {icon && (
         <Image src={icon} width={16} height={16} alt="" className="w-4 h-4" />
       )}

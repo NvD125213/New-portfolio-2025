@@ -4,11 +4,15 @@ import Image from "next/image";
 const ArticleCard = ({ className }: any) => {
   return (
     <div
-      className={`relative min-w-[80vw] sm:min-w-[45%] md:min-w-[30%] max-w-xs lg:min-h-[400px] md:min-h-[350px] min-h-[320px] rounded-xl shadow-lg overflow-hidden group cursor-pointer ${className}`}>
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-all duration-500 group-hover:opacity-80 group-hover:scale-115"
-        style={{ backgroundImage: "url('/article/bg-technical-2.jpg')" }}
+      className={`relative min-w-[80vw] sm:min-w-[45%] md:min-w-[30%] max-w-xs lg:h-[400px] md:h-[350px] h-[320px] rounded-xl shadow-lg overflow-hidden group cursor-pointer ${className}`}>
+      {/* Background Image với kích thước cố định */}
+      <Image
+        src="/article/bg-technical-2.jpg"
+        alt="Technical background"
+        fill
+        className="object-cover transition-all duration-500 group-hover:opacity-80 group-hover:scale-105"
+        sizes="(max-width: 640px) 80vw, (max-width: 768px) 45vw, 30vw"
+        priority={false}
       />
 
       {/* Overlay gradient */}
@@ -62,6 +66,8 @@ const ArticleCard = ({ className }: any) => {
               width={32}
               height={32}
               alt="Author"
+              sizes="32px"
+              priority={false}
             />
           </div>
 

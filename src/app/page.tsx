@@ -1,19 +1,46 @@
 "use client";
-import React from "react";
+import React, { useRef, Suspense } from "react";
+import dynamic from "next/dynamic";
 import SidebarLayout from "./sidebar/layout";
 import ArticleCard from "@/components/card/article-card";
-import { AnimatedTestimonials } from "@/components/ui/animated-ui/animated-testimonials";
 import {
   ArrowRightIcon,
   CircleArrowRightIcon,
   ChevronLeft,
   ChevronRight,
-  Code2Icon,
+  Calendar,
+  MapPin,
+  BookOpen,
 } from "lucide-react";
-import { Experience } from "@/components/timeline-02/timeline-02";
+
+import { experiences } from "@/mock/experience";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import Timeline from "@/components/timeline-02/timeline-02";
-import { useRef } from "react";
+import { educations } from "@/mock/education";
+
+// Lazy load các component nặng
+const AnimatedTestimonials = dynamic(
+  () =>
+    import("@/components/ui/animated-ui/animated-testimonials").then((mod) => ({
+      default: mod.AnimatedTestimonials,
+    })),
+  {
+    loading: () => (
+      <div className="w-full h-32 flex items-center justify-center">
+        <div className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-24 w-full"></div>
+      </div>
+    ),
+    ssr: false,
+  }
+);
+
+const Timeline = dynamic(() => import("@/components/timeline-02/timeline-02"), {
+  loading: () => (
+    <div className="w-full h-96 flex items-center justify-center">
+      <div className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-80 w-full"></div>
+    </div>
+  ),
+  ssr: false,
+});
 
 export default function HomePage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -36,156 +63,6 @@ export default function HomePage() {
     };
     container.scrollTo(scrollOptions);
   };
-
-  const experiences: Experience[] = [
-    {
-      title: "Lập trình viên Full-stack",
-      company: "Công ty cổ phần viễn thông CGV",
-      icon_timeline: <Code2Icon className="h-3 w-3 text-primary" />,
-      level: "Middle",
-      image:
-        "https://cdn-new.topcv.vn/unsafe/https://static.topcv.vn/company_logos/XiVmux6f3zmmUAy5REVVpixvYGPvv73Y_1731309902____a49b8f1134f559fb1766f3d02e12f1a2.jpg",
-      period: "12/03/2025 - Hiện tại",
-      description: [
-        "Tham gia vào quá trình phát triển và duy trì các dự án phần mềm của công ty.",
-        "Phối hợp cùng các thành viên trong nhóm để phân tích yêu cầu và xây dựng giải pháp phù hợp.",
-        "Thực hiện lập trình, kiểm thử và tối ưu mã nguồn nhằm đảm bảo hiệu suất và tính ổn định của hệ thống.",
-        "Tìm hiểu và áp dụng các kiến thức, công nghệ mới vào công việc thực tế.",
-        "Hỗ trợ xử lý sự cố, cải thiện trải nghiệm người dùng và nâng cao chất lượng sản phẩm.",
-      ],
-
-      technologies: [
-        {
-          name: "React",
-          icon: "/icon/react.avif",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Python",
-          icon: "/icon/python.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "FastAPI",
-          icon: "/icon/fastapi.svg",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "TypeScript",
-          icon: "/icon/ts.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Linux",
-          icon: "/icon/linux.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Postgres",
-          icon: "/icon/postgres.jpg",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-      ],
-      projects: [
-        {
-          name: "Project 1",
-          image: "https://images.unsplash.com/photo-1467493330285-2fe6a9f97483",
-          content: "Project 1",
-        },
-        {
-          name: "Project 2",
-          image: "https://images.unsplash.com/photo-1611558709798-e009c8fd7706",
-          content: "Project 2",
-        },
-        {
-          name: "Project 3",
-          image:
-            "https://plus.unsplash.com/premium_photo-1692340973636-6f2ff926af39?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
-          content: "Project 3",
-        },
-        {
-          name: "Project 4",
-          image:
-            "https://images.unsplash.com/photo-1687795975521-825a47419cc8?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
-          content: "Project 4",
-        },
-      ],
-    },
-    {
-      title: "Lập trình viên Frontend",
-      company: "Công ty Cổ phần JVB Việt Nam",
-      icon_timeline: <Code2Icon className="h-3 w-3 text-primary" />,
-      image:
-        "https://itviec.com/rails/active_storage/representations/proxy/eyJfcmFpbHMiOnsiZGF0YSI6Nzk3MjczLCJwdXIiOiJibG9iX2lkIn19--febdc41760429a8aac758b65a46af2f275443e61/eyJfcmFpbHMiOnsiZGF0YSI6eyJmb3JtYXQiOiJwbmciLCJyZXNpemVfdG9fZml0IjpbMTcwLG51bGxdfSwicHVyIjoidmFyaWF0aW9uIn19--296f540994727dae0782a32330a49c8b7374a6c7/jvb-vietnam-logo.png",
-      period: "04/09/2024 - 01/01/2025",
-      level: "Intern/Fresher",
-      description: [
-        "Tham gia phát triển giao diện người dùng cho các hệ thống quản lý và website dịch vụ.",
-        "Phối hợp với nhóm backend để tích hợp API và xử lý dữ liệu động trên giao diện.",
-        "Đảm bảo sản phẩm hiển thị tốt trên đa nền tảng và tối ưu hiệu năng khi tải trang.",
-        "Tham gia review code và đóng góp ý kiến cải tiến quy trình phát triển giao diện.",
-        "Học hỏi, cập nhật xu hướng UI/UX và công nghệ web mới để áp dụng vào dự án thực tế.",
-      ],
-      technologies: [
-        {
-          name: "React",
-          icon: "/icon/react.avif",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Python",
-          icon: "/icon/python.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "FastAPI",
-          icon: "/icon/fastapi.svg",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "TypeScript",
-          icon: "/icon/ts.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Linux",
-          icon: "/icon/linux.png",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-        {
-          name: "Postgres",
-          icon: "/icon/postgres.jpg",
-          bg: "bg-[#242629]",
-          classname: "text-white",
-        },
-      ],
-      projects: [
-        {
-          name: "Project 3",
-          image:
-            "https://plus.unsplash.com/premium_photo-1692340973636-6f2ff926af39?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
-          content: "Project 3",
-        },
-        {
-          name: "Project 4",
-          image:
-            "https://images.unsplash.com/photo-1687795975521-825a47419cc8?auto=format&fit=crop&q=80&w=3506&ixlib=rb-4.0.3",
-          content: "Project 4",
-        },
-      ],
-    },
-  ];
 
   return (
     <SidebarLayout>
@@ -281,64 +158,71 @@ export default function HomePage() {
               Công cụ tôi có thể dùng
             </h2>
           </div>
-          <AnimatedTestimonials
-            data={[
-              {
-                description:
-                  "Thư viện UI mạnh mẽ cho React với các component có sẵn, dễ customize và accessibility tốt. Perfect cho việc xây dựng giao diện hiện đại nhanh chóng.",
-                image:
-                  "https://images.viblo.asia/548b7fea-3301-4c27-b436-2d3a70606d81.png",
-                name: "React",
-              },
-              {
-                description:
-                  "Ngôn ngữ lập trình đa năng, dễ học và mạnh mẽ. Phù hợp cho web development, data science, AI/ML và automation.",
-                image:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKSkjA64ptIZHXfiI4AA-6w2U-_d5t1h2ojQ&s",
-                name: "Python",
-              },
-              {
-                description:
-                  "ORM hiện đại cho Node.js và TypeScript. Type-safe, dễ sử dụng và hỗ trợ nhiều database. Làm việc với database chưa bao giờ đơn giản đến vậy.",
-                image:
-                  "https://cdn-1.webcatalog.io/catalog/prisma-data-platform/prisma-data-platform-icon-filled-256.webp?v=1714776724281",
-                name: "Prisma",
-              },
-              {
-                description:
-                  "Collection các component đẹp và accessible được build trên Radix UI. Copy, paste và customize dễ dàng. Best choice cho React projects.",
-                image: "https://ui.shadcn.com/apple-touch-icon.png",
-                name: "shadcn/ui",
-              },
-              {
-                description:
-                  "Framework hiện đại cho Python để build API cực nhanh. Type hints, auto docs, async support và performance vượt trội.",
-                image: "https://cdn.worldvectorlogo.com/logos/fastapi.svg",
-                name: "FastAPI",
-              },
-              {
-                description:
-                  "Node.js + ExpressJS/Fastify. Perfect cho việc xây dựng web applications và APIs với kiến trúc đơn giản, dễ mở rộng.",
-                image:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFwrcvX28Ty3ZNNefYjtMWFwnL04kS3SO8wA&s",
-                name: "Node.js",
-              },
-              {
-                description:
-                  "React framework với Server Components, App Router, và built-in optimization. SSR, SSG, ISR - everything you need cho production-ready apps.",
-                image:
-                  "https://camo.githubusercontent.com/26d06a6572aa5d9ecdb699add71d40e57aefe8244c6306ba58a70aee6ad5123c/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67",
-                name: "Next.js",
-              },
-              {
-                description:
-                  "Material UI là một thư viện thành phần React nguồn mở triển khai Material Design của Google. Thư viện này rất toàn diện và có thể được sử dụng ngay khi xuất xưởng",
-                image:
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFY3K5XUSRCmsfO3GQ2frO7dRV2_e-jQ-xrg&s",
-                name: "Material UI",
-              },
-            ]}
-          />
+          <Suspense
+            fallback={
+              <div className="w-full h-32 flex items-center justify-center">
+                <div className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-24 w-full"></div>
+              </div>
+            }>
+            <AnimatedTestimonials
+              data={[
+                {
+                  description:
+                    "Thư viện UI mạnh mẽ cho React với các component có sẵn, dễ customize và accessibility tốt. Perfect cho việc xây dựng giao diện hiện đại nhanh chóng.",
+                  image:
+                    "https://images.viblo.asia/548b7fea-3301-4c27-b436-2d3a70606d81.png",
+                  name: "React",
+                },
+                {
+                  description:
+                    "Ngôn ngữ lập trình đa năng, dễ học và mạnh mẽ. Phù hợp cho web development, data science, AI/ML và automation.",
+                  image:
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKSkjA64ptIZHXfiI4AA-6w2U-_d5t1h2ojQ&s",
+                  name: "Python",
+                },
+                {
+                  description:
+                    "ORM hiện đại cho Node.js và TypeScript. Type-safe, dễ sử dụng và hỗ trợ nhiều database. Làm việc với database chưa bao giờ đơn giản đến vậy.",
+                  image:
+                    "https://cdn-1.webcatalog.io/catalog/prisma-data-platform/prisma-data-platform-icon-filled-256.webp?v=1714776724281",
+                  name: "Prisma",
+                },
+                {
+                  description:
+                    "Collection các component đẹp và accessible được build trên Radix UI. Copy, paste và customize dễ dàng. Best choice cho React projects.",
+                  image: "https://ui.shadcn.com/apple-touch-icon.png",
+                  name: "shadcn/ui",
+                },
+                {
+                  description:
+                    "Framework hiện đại cho Python để build API cực nhanh. Type hints, auto docs, async support và performance vượt trội.",
+                  image: "https://cdn.worldvectorlogo.com/logos/fastapi.svg",
+                  name: "FastAPI",
+                },
+                {
+                  description:
+                    "Node.js + ExpressJS/Fastify. Perfect cho việc xây dựng web applications và APIs với kiến trúc đơn giản, dễ mở rộng.",
+                  image:
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFwrcvX28Ty3ZNNefYjtMWFwnL04kS3SO8wA&s",
+                  name: "Node.js",
+                },
+                {
+                  description:
+                    "React framework với Server Components, App Router, và built-in optimization. SSR, SSG, ISR - everything you need cho production-ready apps.",
+                  image:
+                    "https://camo.githubusercontent.com/26d06a6572aa5d9ecdb699add71d40e57aefe8244c6306ba58a70aee6ad5123c/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67",
+                  name: "Next.js",
+                },
+                {
+                  description:
+                    "Material UI là một thư viện thành phần React nguồn mở triển khai Material Design của Google. Thư viện này rất toàn diện và có thể được sử dụng ngay khi xuất xưởng",
+                  image:
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFY3K5XUSRCmsfO3GQ2frO7dRV2_e-jQ-xrg&s",
+                  name: "Material UI",
+                },
+              ]}
+            />
+          </Suspense>
 
           <div className="flex justify-between group py-1">
             <h2 className="lg:text-2xl font-bold items-center text-sm">
@@ -346,13 +230,13 @@ export default function HomePage() {
             </h2>
           </div>
           <div id="experience-work">
-            <div className="w-full">
+            <div className="w-full mb-10">
               <div className="md:px-4 rounded-lg">
                 <div className="space-y-4">
                   <div className="flex items-center pt-4 pb-2 gap-4">
                     <Avatar
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full p-1 
-                 border bg-white/10 backdrop-blur-xs shadow-md shadow-gray-400/30">
+                        border bg-white/10 backdrop-blur-xs shadow-md shadow-gray-400/30">
                       <AvatarImage
                         className="rounded-full"
                         src="/experience/gif_experience.gif"
@@ -372,6 +256,108 @@ export default function HomePage() {
                   <Timeline experiences={experiences} />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-full px-1 mx-auto">
+          <h2 className="lg:text-2xl font-bold items-center text-sm">
+            Con đường học tập
+          </h2>
+          <div className="md:px-4 rounded-lg">
+            <div className="flex items-center pt-4 pb-2 gap-4">
+              <Avatar
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full p-1 
+                        border bg-white/10 backdrop-blur-xs shadow-md shadow-gray-400/30">
+                <AvatarImage
+                  className="rounded-full"
+                  src="/experience/internet.gif"
+                  alt="GIF Experience"
+                />
+                <AvatarFallback>GIF Study</AvatarFallback>
+              </Avatar>
+              <h2 className="lg:text-xl font-medium leading-snug items-center text-lg text-[#fffffe]">
+                Học vấn
+              </h2>
+              <span
+                className="relative w-2 h-2 rounded-full mt-1 bg-[#7f5af0] 
+                      before:content-[''] before:absolute before:inset-0 before:bg-inherit 
+                      before:rounded-full before:-z-10 before:animate-[ripple_1.5s_ease-out_infinite]"></span>
+            </div>
+            <div className="space-y-6 pl-0 mt-4">
+              {educations.map((edu, index) => (
+                <div
+                  key={index}
+                  className="relative pb-6 border-l-2 border-purple-500/30 last:border-l-0 last:pb-0">
+                  {/* Education card */}
+                  <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 md:p-5 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 group">
+                    <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                      {/* Left side - Information (50%) */}
+                      <div className="flex-1 md:w-1/2">
+                        <h3 className="text-base md:text-lg font-semibold text-[#fffffe] mb-2 group-hover:text-purple-300 transition-colors">
+                          {edu.school}
+                        </h3>
+                        <p className="text-purple-300 font-medium mb-3 text-sm md:text-base">
+                          {edu.degree}
+                        </p>
+                        <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-gray-300 mb-3">
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-400" />
+                            <span>{edu.period}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-purple-400" />
+                            <span>{edu.location}</span>
+                          </div>
+                        </div>
+
+                        {/* GPA */}
+                        <div className="inline-block bg-purple-500/20 px-3 py-1 rounded-full mb-3">
+                          <p className="text-xs md:text-sm text-purple-200 font-medium">
+                            {edu.gpa}
+                          </p>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-sm text-gray-400 mb-3">
+                          {edu.description}
+                        </p>
+
+                        {/* Achievements */}
+                        {edu.achievements && edu.achievements.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-white/10">
+                            <div className="flex items-center gap-2 mb-2">
+                              <BookOpen className="w-4 h-4 text-purple-400" />
+                              <span className="text-xs md:text-sm font-medium text-gray-300">
+                                Thành tích nổi bật:
+                              </span>
+                            </div>
+                            <ul className="space-y-1.5 ml-6">
+                              {edu.achievements.map((achievement, idx) => (
+                                <li
+                                  key={idx}
+                                  className="text-xs md:text-sm text-gray-400 relative before:content-['•'] before:absolute before:-left-4 before:text-purple-400">
+                                  {achievement}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Right side - Image (50%) */}
+                      <div className="flex-1 md:w-1/2">
+                        <div className="w-full h-full min-h-[200px] md:min-h-[300px] rounded-lg overflow-hidden bg-white/5 border border-white/10">
+                          <img
+                            src={edu.image}
+                            alt={edu.school}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

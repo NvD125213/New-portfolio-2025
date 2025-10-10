@@ -9,6 +9,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,9 +21,19 @@ import {
 } from "@/components/ui/carousel/carousel";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+// Lazy load CardJob để tối ưu hiệu suất
+const CardJob = dynamic(() => import("../ui/card-info/card-job"), {
+  loading: () => (
+    <div className="flex items-center justify-center p-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  ),
+  ssr: false,
+});
+import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 
 export interface Technology {
   name?: string;
@@ -49,12 +60,22 @@ export interface Experience {
   projects?: Project[];
 }
 
+export interface DetalProject extends Project {
+  timesize: number;
+  technology: Technology;
+  scope: string;
+  timeline: string;
+  feature: [];
+}
+
 interface TimelineProps {
   experiences: Experience[];
 }
 
 export default function Timeline({ experiences }: TimelineProps) {
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [openCardJob, setOpenCardJob] = useState(false);
+  const [detailJob, setDetailJob] = useState<DetalProject | null>(null);
 
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const activeIndexRef = useRef<number>(0);
@@ -64,6 +85,22 @@ export default function Timeline({ experiences }: TimelineProps) {
   const [carouselOffset, setCarouselOffset] = useState<number>(0);
   const scrollRafRef = useRef<number | null>(null);
   const [showRight, setShowRight] = useState<boolean>(false);
+
+  // Tối ưu với useCallback để tránh re-render không cần thiết
+  const handleOpenCardJob = useCallback((data: any) => {
+    setDetailJob(data);
+    setOpenCardJob(true);
+  }, []);
+
+  // Preload dữ liệu khi hover để tăng tốc độ mở dialog
+  const handlePreloadData = useCallback(() => {
+    // Preload component để tăng tốc độ mở dialog
+    import("../ui/card-info/card-job");
+  }, []);
+
+  const handleClearPreload = useCallback(() => {
+    // Clear preload nếu cần
+  }, []);
 
   // Dùng Intersection Observer để phát hiện timeline nào trong viewport
   // Giảm giật bằng cách: so sánh trước khi setState và batch bằng rAF
@@ -100,11 +137,24 @@ export default function Timeline({ experiences }: TimelineProps) {
   useEffect(() => {
     const updateOffset = () => {
       const activeEl = itemRefs.current[activeIndexRef.current];
-      const leftEl = leftColRef.current;
-      if (!activeEl || !leftEl) return;
-      const leftRect = leftEl.getBoundingClientRect();
-      const itemRect = activeEl.getBoundingClientRect();
-      const offset = Math.max(0, itemRect.top - leftRect.top);
+      const rightEl = rightColRef.current;
+      if (!activeEl || !rightEl) return;
+
+      const activeRect = activeEl.getBoundingClientRect();
+      const rightRect = rightEl.getBoundingClientRect();
+
+      // Tính toán offset để căn giữa carousel với timeline item
+      const itemCenter = activeRect.top + activeRect.height / 2;
+      const rightCenter = rightRect.top + rightRect.height / 2;
+
+      // Offset để căn giữa carousel với timeline item
+      // Giới hạn offset để không vượt quá bounds
+      const maxOffset = Math.max(
+        0,
+        activeProjects.length * 400 - rightRect.height
+      );
+      const offset = Math.max(0, Math.min(itemCenter - rightCenter, maxOffset));
+
       setCarouselOffset(offset);
     };
 
@@ -113,15 +163,19 @@ export default function Timeline({ experiences }: TimelineProps) {
       scrollRafRef.current = requestAnimationFrame(updateOffset);
     };
 
-    updateOffset();
+    // Delay để đảm bảo DOM đã render xong
+    const timeoutId = setTimeout(updateOffset, 100);
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener("scroll", onScroll as any);
       window.removeEventListener("resize", onScroll as any);
       if (scrollRafRef.current) cancelAnimationFrame(scrollRafRef.current);
     };
-  }, [activeIndex]);
+  }, [activeIndex, activeProjects.length]);
 
   // Hiện/ẩn panel phải theo việc khu vực timeline có đang trong viewport không
   useEffect(() => {
@@ -144,12 +198,12 @@ export default function Timeline({ experiences }: TimelineProps) {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto md:px-4 sm:px-6">
+    <div className="max-w-7xl mx-auto md:px-4 sm:px-6 min-h-screen">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         {/* Left: Timeline list */}
-        <div className="relative" ref={leftColRef}>
+        <div className="relative pb-20" ref={leftColRef}>
           {/* Timeline line */}
-          <div className="absolute left-2 md:left-3 top-4 bottom-0 border-l-2" />
+          <div className="absolute left-2 md:left-3 top-4 bottom-0 border-l-2 h-[93%]" />
 
           {experiences.map(
             (
@@ -207,7 +261,7 @@ export default function Timeline({ experiences }: TimelineProps) {
 
                   <div>
                     <h3 className="text-lg font-semibold">{title}</h3>
-                    <div className="grid grid-cols-2 md:auto-cols-max md:grid-flow-col md:items-center gap-x-3 gap-y-1 mt-1 text-sm text-muted-foreground">
+                    <div className="grid grid-cols-2 md:auto-cols-max md:grid-flow-col md:flex md:items-center gap-x-3 gap-y-1 mt-1 text-sm text-muted-foreground">
                       {/* Chiếm full width trên mobile */}
                       <div className="flex items-center gap-2 col-span-2 md:col-span-1">
                         <Calendar className="h-4 w-4 text-primary/80" />
@@ -265,7 +319,6 @@ export default function Timeline({ experiences }: TimelineProps) {
                           </div>
                         )}
                       </div>
-                      {/* Level và Xem dự án cùng hàng trên mobile */}
                     </div>
                   </div>
 
@@ -300,89 +353,123 @@ export default function Timeline({ experiences }: TimelineProps) {
         </div>
 
         {/* Right: Carousel for active item (ẩn trên mobile) */}
-        <div className="min-h-[240px] hidden md:block md:sticky md:top-20">
-          <AnimatePresence mode="wait">
-            {showRight && activeProjects.length > 0 ? (
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, x: 12 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -12 }}
-                transition={{ duration: 0.15, ease: "easeOut" }}
-                ref={rightColRef}>
-                <div style={{ height: `${carouselOffset}px` }} />
-                <Carousel className="w-full max-w-none">
-                  <CarouselContent>
-                    {activeProjects.map((item, idx) => (
-                      <CarouselItem key={idx}>
-                        <div className="p-1 h-96 md:h-[26rem]">
-                          <Card
-                            className="h-full flex flex-col overflow-hidden
-                              bg-gradient-to-br from-gray-50 to-gray-100 
-                              dark:from-[#0b0b0c] dark:to-[#1b1b1f]
-                              border border-gray-200 dark:border-gray-700/60 
-                              ring-1 ring-gray-300/40 dark:ring-gray-600/30
-                              shadow-sm hover:shadow-lg hover:-translate-y-[2px]
-                              transition-all duration-200 rounded-xl">
-                            <CardHeader className="p-0 shrink-0">
-                              <Image
-                                src={String(item?.image)}
-                                alt={item?.name ?? `Project ${idx}`}
-                                width={640}
-                                height={320}
-                                className="object-cover w-full h-36 md:h-40"
-                                sizes="(max-width: 768px) 100vw, 480px"
-                                priority={idx === 0}
-                              />
-                            </CardHeader>
+        <div className="hidden md:block md:sticky md:top-20">
+          <div ref={rightColRef} className="relative">
+            <AnimatePresence mode="wait">
+              {showRight && activeProjects.length > 0 ? (
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, x: 12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -12 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute top-0 left-0 right-0"
+                  style={{
+                    transform: `translateY(${carouselOffset}px)`,
+                  }}>
+                  <div className="w-full">
+                    <Carousel className="w-full max-w-none">
+                      <CarouselContent>
+                        {activeProjects.map((item, idx) => (
+                          <CarouselItem key={idx}>
+                            <div className="p-1 h-96 md:h-[26rem]">
+                              <Card
+                                className="group h-full flex flex-col overflow-hidden
+                                bg-white/70 dark:bg-[#0f0f12]/80
+                                backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60
+                                shadow-sm hover:shadow-md hover:-translate-y-[4px]
+                                transition-all duration-300 ease-out rounded-2xl ring-1 ring-transparent hover:ring-indigo-300/40">
+                                <CardHeader className="relative p-0 overflow-hidden rounded-t-2xl">
+                                  <Image
+                                    src={String(item?.image)}
+                                    alt={item?.name ?? `Project ${idx}`}
+                                    width={640}
+                                    height={320}
+                                    className="object-cover w-full h-40 transition-transform duration-300 group-hover:scale-105 rounded-t-2xl"
+                                    sizes="(max-width: 768px) 100vw, 480px"
+                                    priority={idx === 0}
+                                  />
+                                  <div
+                                    className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent
+                                    opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none"
+                                  />
+                                </CardHeader>
 
-                            <CardContent className="p-3 pt-3 space-y-2 flex-1 overflow-auto">
-                              <h3 className="text-base md:text-lg font-semibold tracking-tight line-clamp-2">
-                                {item?.name}
-                              </h3>
-                              {item?.content && (
-                                <p className="text-sm md:text-[15px] text-muted-foreground line-clamp-5">
-                                  {item?.content}
-                                </p>
-                              )}
-                            </CardContent>
+                                {/* đảm bảo min-height đủ cho 3 dòng text */}
+                                <CardContent className="p-4 space-y-2 flex-1 overflow-hidden min-h-[4rem] md:min-h-[8.5rem]">
+                                  <h3 className="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 line-clamp-2">
+                                    {item?.name}
+                                  </h3>
 
-                            <CardFooter className="p-3 pt-0 mt-auto">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="w-full group flex items-center justify-center gap-1 text-sm font-medium 
-                                border border-gray-300 dark:border-gray-600 
-                                bg-transparent text-gray-800 dark:text-gray-200
-                                hover:bg-gray-100 dark:hover:bg-gray-800 
-                                hover:border-gray-400 dark:hover:border-gray-500
-                                hover:text-black dark:hover:text-white
-                                transition-all duration-200">
-                                Xem chi tiết
-                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                              </Button>
-                            </CardFooter>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                </Carousel>
-              </motion.div>
-            ) : showRight ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="text-sm text-muted-foreground">
-                Không có dự án để hiển thị
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+                                  {item?.content && (
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+                                      {item?.content}
+                                    </p>
+                                  )}
+                                </CardContent>
+
+                                <CardFooter className="p-4 pt-0 mt-auto">
+                                  <Button
+                                    onClick={() => handleOpenCardJob(item)}
+                                    onMouseEnter={handlePreloadData}
+                                    onMouseLeave={handleClearPreload}
+                                    className="group/btn">
+                                    Xem chi tiết
+                                    <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                                  </Button>
+                                </CardFooter>
+                              </Card>
+                            </div>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                    </Carousel>
+                  </div>
+                </motion.div>
+              ) : showRight ? (
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-sm text-muted-foreground">
+                  Không có dự án để hiển thị
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
+      {/* Dialog hiển thị chi tiết dự án với animation tối ưu */}
+      <AnimatePresence mode="wait">
+        {openCardJob && (
+          <Dialog open={openCardJob} onOpenChange={setOpenCardJob}>
+            <DialogContent className="w-full sm:max-w-3xl">
+              <DialogHeader>
+                <DialogTitle className="sr-only">
+                  Chi tiết dự án {detailJob?.name || ""}
+                </DialogTitle>
+                <DialogDescription className="sr-only">
+                  Thông tin chi tiết về dự án {detailJob?.name || ""} bao gồm
+                  công nghệ sử dụng, tính năng và timeline thực hiện.
+                </DialogDescription>
+              </DialogHeader>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{
+                  duration: 0.2,
+                  ease: [0.4, 0.0, 0.2, 1],
+                  opacity: { duration: 0.15 },
+                }}>
+                {detailJob && <CardJob item={detailJob} />}
+              </motion.div>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
